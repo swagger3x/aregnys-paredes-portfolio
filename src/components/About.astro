@@ -1,0 +1,55 @@
+---
+import { experience, focusAreas, profile, summary } from '../data/resume';
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+
+const current = experience[0];
+---
+
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container-page">
+    <SectionHeading eyebrow="about" title="Evaluation-driven AI engineering" id="about-title" />
+
+    <div class="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-12">
+      <p class="text-base leading-relaxed text-muted sm:text-lg" data-reveal>{summary}</p>
+
+      <aside class="card h-fit p-6" data-reveal aria-label="At a glance">
+        <dl class="space-y-5 text-sm">
+          <div>
+            <dt class="eyebrow text-subtle!">Currently</dt>
+            <dd class="mt-1.5 font-semibold text-fg">{current.title}</dd>
+            <dd class="text-muted">{current.company} · since {current.start}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-subtle!">Based in</dt>
+            <dd class="mt-1.5 text-fg">{profile.location}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-subtle!">Works in</dt>
+            <dd class="mt-1.5 text-fg">Python, TypeScript, Java, C/C++, Rust</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+
+    <h3 class="mt-20 mb-8 text-xl font-semibold tracking-tight" data-reveal>What I focus on</h3>
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        focusAreas.map((area) => (
+          <li class="card group flex flex-col p-6 transition-colors hover:border-accent/50" data-reveal>
+            <span class="grid size-11 place-items-center rounded-xl border border-line bg-surface-2 text-accent transition-colors group-hover:text-accent-2">
+              <Icon name={area.icon} size={22} />
+            </span>
+            <h4 class="mt-5 text-lg font-semibold tracking-tight">{area.title}</h4>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{area.description}</p>
+            <ul class="mt-5 flex flex-wrap gap-2" aria-label={`${area.title} keywords`}>
+              {area.tags.map((tag) => (
+                <li class="font-mono text-xs text-subtle">#{tag.toLowerCase().replace(/\s+/g, '-')}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

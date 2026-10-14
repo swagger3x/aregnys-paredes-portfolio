@@ -1,0 +1,127 @@
+---
+import { navLinks, profile } from '../data/resume';
+import Icon from './Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header
+  data-header
+  class="sticky top-0 z-50 border-b border-transparent backdrop-blur-md transition-colors duration-300 data-[scrolled]:border-line data-[scrolled]:bg-bg/80"
+>
+  <nav class="container-page flex h-16 items-center justify-between gap-4" aria-label="Primary">
+    <a href="#top" class="group flex items-center gap-3" aria-label={`${profile.name}, back to top`}>
+      <span
+        class="grid size-9 place-items-center rounded-xl bg-linear-to-br from-accent to-accent-2 font-mono text-sm font-bold text-on-accent"
+        aria-hidden="true"
+      >
+        {profile.initials}
+      </span>
+      <span class="hidden text-sm font-semibold tracking-tight sm:inline">{profile.shortName}</span>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <ul class="mr-2 hidden items-center gap-1 md:flex">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                data-nav-link
+                class="rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:text-fg aria-[current=true]:text-accent"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={profile.resumePdf} class="btn btn-ghost hidden px-4! py-2! sm:inline-flex" target="_blank" rel="noopener">
+        <Icon name="download" size={16} />
+        Résumé
+      </a>
+      <ThemeToggle />
+      <button
+        type="button"
+        data-menu-button
+        class="grid size-10 place-items-center rounded-xl border border-line bg-surface text-muted md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <Icon name="menu" class="menu-open-icon" />
+        <Icon name="x" class="menu-close-icon hidden" />
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" data-menu hidden class="border-t border-line bg-bg/95 md:hidden">
+    <ul class="container-page flex flex-col py-3">
+      {
+        navLinks.map((link) => (
+          <li>
+            <a href={link.href} class="block rounded-lg px-2 py-3 text-base text-fg hover:text-accent">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="mt-2 border-t border-line pt-4 pb-2">
+        <a href={profile.resumePdf} class="btn btn-primary w-full" target="_blank" rel="noopener">
+          <Icon name="download" size={16} />
+          Download Résumé
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const menuButton = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+
+  // Border + background once the page scrolls.
+  const onScroll = () => header?.toggleAttribute('data-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu.
+  const setMenu = (open: boolean) => {
+    if (!menu || !menuButton) return;
+    menu.hidden = !open;
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menuButton.querySelector('.menu-open-icon')?.classList.toggle('hidden', open);
+    menuButton.querySelector('.menu-close-icon')?.classList.toggle('hidden', !open);
+    header?.toggleAttribute('data-scrolled', open || window.scrollY > 8);
+  };
+  menuButton?.addEventListener('click', () => setMenu(Boolean(menu?.hidden)));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      setMenu(false);
+      menuButton?.focus();
+    }
+  });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => e.matches && setMenu(false));
+
+  // Highlight the nav link for the section currently in view.
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+  const sections = [...links]
+    .map((l) => document.querySelector<HTMLElement>(l.getAttribute('href') ?? ''))
+    .filter((s): s is HTMLElement => s !== null);
+  if ('IntersectionObserver' in window && sections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          links.forEach((l) =>
+            l.setAttribute('aria-current', String(l.getAttribute('href') === `#${entry.target.id}`)),
+          );
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

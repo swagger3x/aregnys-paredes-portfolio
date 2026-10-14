@@ -1,0 +1,16 @@
+---
+import { profile } from '../data/resume';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line">
+  <div class="container-page flex flex-col items-center justify-between gap-4 py-8 text-sm text-subtle sm:flex-row">
+    <p>© {year} {profile.name}</p>
+    <a href="#top" class="inline-flex items-center gap-1.5 transition-colors hover:text-accent">
+      Back to top
+      <Icon name="arrow-up" size={16} />
+    </a>
+  </div>
+</footer>

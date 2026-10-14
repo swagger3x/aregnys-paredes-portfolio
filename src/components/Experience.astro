@@ -1,0 +1,54 @@
+---
+import { experience } from '../data/resume';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="experience" class="section" aria-labelledby="experience-title">
+  <div class="container-page">
+    <SectionHeading eyebrow="experience" title="Where I've built" id="experience-title">
+      Production AI today, on a foundation of secure, high-throughput financial software.
+    </SectionHeading>
+
+    <ol class="relative ml-2 border-l border-line sm:ml-3">
+      {
+        experience.map((role, i) => (
+          <li class="relative pb-12 pl-8 last:pb-0 sm:pl-10" data-reveal>
+            <span
+              class:list={[
+                'absolute top-1.5 -left-[7px] size-3.5 rounded-full border-2 border-bg',
+                i === 0 ? 'bg-accent-2 ring-4 ring-accent-2/20' : 'bg-accent',
+              ]}
+              aria-hidden="true"
+            />
+            <article class="card p-6 sm:p-8">
+              <header class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                <div>
+                  <h3 class="text-lg font-semibold tracking-tight sm:text-xl">{role.title}</h3>
+                  <p class="mt-1 font-medium text-accent">
+                    {role.company}
+                    <span class="font-normal text-subtle"> · {role.location}</span>
+                  </p>
+                </div>
+                <p class="shrink-0 font-mono text-xs text-muted sm:pt-1.5 sm:text-sm">
+                  <time>{role.start}</time> – <time>{role.end}</time>
+                </p>
+              </header>
+              <p class="mt-4 text-sm text-subtle italic">Focus: {role.focus}</p>
+              <ul class="mt-5 space-y-3">
+                {role.highlights.map((item) => (
+                  <li class="relative pl-5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
+                    <span
+                      class="absolute top-[0.6em] left-0 size-1.5 rounded-full bg-accent/70"
+                      aria-hidden="true"
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

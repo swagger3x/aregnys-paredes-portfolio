@@ -1,0 +1,17 @@
+// Cloudflare Workers (static assets) deployment.
+// Workers Builds runs `npm run build` then `npx wrangler deploy` on every push to main.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Must match the Worker name chosen when connecting the repo in the Cloudflare dashboard.
+  "name": "aregnys-paredes-portfolio",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  // Cloudflare creates the DNS record and TLS certificate for this hostname on deploy.
+  "routes": [{ "pattern": "aregnys-paredes.createlogs.com", "custom_domain": true }],
+  // Serve only from the custom domain, not a second *.workers.dev URL.
+  "workers_dev": false,
+  "preview_urls": false
+}

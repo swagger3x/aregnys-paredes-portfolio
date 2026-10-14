@@ -1,0 +1,20 @@
+---
+import Icon from '../components/Icon.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/resume';
+---
+
+<BaseLayout title={`Page not found | ${profile.name}`} noindex>
+  <main id="main" class="relative grid min-h-dvh place-items-center overflow-hidden">
+    <div class="dot-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="container-page relative text-center">
+      <p class="eyebrow">// error 404</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">This page isn't in the training data.</h1>
+      <p class="mx-auto mt-4 max-w-md text-muted">The link may be broken, or the page may have moved.</p>
+      <a href="/" class="btn btn-primary mt-8">
+        <Icon name="arrow-right" size={18} class="rotate-180" />
+        Back to the homepage
+      </a>
+    </div>
+  </main>
+</BaseLayout>

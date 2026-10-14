@@ -1,0 +1,92 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../assets/portrait.jpg';
+import { profile, stats } from '../data/resume';
+import Icon from './Icon.astro';
+---
+
+<section id="top" class="relative overflow-hidden">
+  <div class="dot-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div class="glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+  <div class="container-page relative grid items-center gap-14 pt-14 pb-20 sm:pt-20 lg:grid-cols-[1.25fr_1fr] lg:gap-10 lg:pt-24 lg:pb-28">
+    <div class="order-2 lg:order-1">
+      <h1 class="text-4xl leading-[1.08] font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+        Aregnys C.
+        <span class="text-gradient block">Paredes Gomez</span>
+      </h1>
+
+      <p class="mt-5 text-lg font-semibold text-fg sm:text-xl">{profile.title}</p>
+      <p class="mt-2 font-mono text-sm text-muted">
+        {profile.tagline.join('  ·  ')}
+      </p>
+
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+        I design, fine-tune, and evaluate production LLM systems, from RAG and multi-agent pipelines to document
+        intelligence, backed by 14+ years of building secure, high-throughput software.
+      </p>
+
+      <p class="mt-5 flex items-center gap-2 text-sm text-subtle">
+        <Icon name="map-pin" size={16} />
+        {profile.location}
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={profile.resumePdf} class="btn btn-primary" target="_blank" rel="noopener">
+          <Icon name="download" size={18} />
+          Download Résumé
+        </a>
+        <a href="#contact" class="btn btn-ghost">
+          Get in touch
+          <Icon name="arrow-right" size={18} />
+        </a>
+        {
+          profile.linkedin && (
+            <a href={profile.linkedin} class="btn btn-ghost" target="_blank" rel="noopener">
+              <Icon name="linkedin" size={18} />
+              LinkedIn
+            </a>
+          )
+        }
+      </div>
+
+      <dl class="mt-12 grid max-w-xl grid-cols-3 gap-3 sm:gap-4">
+        {
+          stats.map((stat) => (
+            <div class="card px-4 py-4 sm:px-5">
+              <dt class="sr-only">{stat.label}</dt>
+              <dd>
+                <span class="block text-2xl font-bold tracking-tight text-fg sm:text-3xl">{stat.value}</span>
+                <span class="mt-1 block text-xs leading-snug text-muted sm:text-sm" aria-hidden="true">
+                  {stat.label}
+                </span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+      <!-- Full, uncropped portrait at its native aspect ratio. -->
+      <div class="relative w-60 sm:w-72 lg:w-92">
+        <div class="dot-patch absolute -top-5 -left-5 size-28 sm:-top-6 sm:-left-6 sm:size-32" aria-hidden="true"></div>
+        <div
+          class="absolute inset-0 translate-x-3 translate-y-3 rounded-3xl bg-linear-to-br from-accent/45 to-accent-2/45 sm:translate-x-4 sm:translate-y-4"
+          aria-hidden="true"
+        >
+        </div>
+        <Picture
+          src={portrait}
+          alt={`Portrait of ${profile.name}`}
+          formats={['avif', 'webp']}
+          widths={[240, 368, 576, 736, 1028]}
+          sizes="(min-width: 1024px) 368px, (min-width: 640px) 288px, 240px"
+          loading="eager"
+          fetchpriority="high"
+          class="relative block h-auto w-full rounded-3xl border border-line shadow-[0_30px_80px_-30px_var(--accent)]"
+        />
+      </div>
+    </div>
+  </div>
+</section>

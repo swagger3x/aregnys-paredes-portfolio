@@ -1,0 +1,27 @@
+---
+import { skillGroups } from '../data/resume';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="skills" class="section border-y border-line bg-surface/40" aria-labelledby="skills-title">
+  <div class="container-page">
+    <SectionHeading eyebrow="skills" title="Technical toolkit" id="skills-title">
+      From model training and evaluation down to the networks and security controls underneath.
+    </SectionHeading>
+
+    <div class="columns-1 gap-5 md:columns-2">
+      {
+        skillGroups.map((group) => (
+          <div class="card mb-5 break-inside-avoid p-6" data-reveal>
+            <h3 class="text-base font-semibold tracking-tight">{group.category}</h3>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {group.skills.map((skill) => (
+                <li class="chip">{skill}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
